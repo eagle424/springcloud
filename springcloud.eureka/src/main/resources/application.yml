@@ -3,3 +3,4 @@ spring:
     name: eureka
   profiles:
     active: prod1
+
