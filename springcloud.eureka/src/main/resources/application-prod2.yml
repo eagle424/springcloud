@@ -1,0 +1,10 @@
+server:
+  port: 8002
+eureka:
+  instance:                   #定义Eureka实例
+    hostname: eureka-8002.com #Eureka实例所在的主机名
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-8001.com:8001/eureka/,http://eureka-8003.com:8003/eureka/
+    register-with-eureka: true #表示是否将自己注册到Eureka Server上，默认为true 
+    fetch-registry: true       #表示是否从Eureka Server上获取注册信息，默认为true

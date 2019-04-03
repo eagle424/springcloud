@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 文件输出格式 -->
+    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+    <property name="FILE_NAME" value="eureka" />
+    <!-- 文件路径 -->
+    <property name="PATH_DEV"  value="/home/springcloud/logs" />
+    <property name="PATH_TEST" value="/home/springcloud/logs" />
+    <property name="PATH_PROD" value="/home/springcloud/logs" />
+    
+    
+    <!-- 开发环境 -->
+    <springProfile name="dev">
+        <!-- 输出到控制台 -->
+	    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	        <encoder>
+	            <pattern>${PATTERN}</pattern>
+	        </encoder>
+	    </appender>
+        <!--按天生成日志文件 -->
+		<appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<Prudent>true</Prudent>
+			<!-- 文件路径 -->
+			<file>${PATH_DEV}/${FILE_NAME}.log</file>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<FileNamePattern>${PATH_DEV}/${FILE_NAME}.%d{yyyy-MM-dd}.log</FileNamePattern>
+				<!-- 文件最大保存历史数量 -->
+                <MaxHistory>5</MaxHistory>
+			</rollingPolicy>
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<Pattern>${PATTERN}</Pattern>
+			</layout>
+		</appender>
+        <logger name="com.ba.springcloud.eureka" level="info" />
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="LOGFILE" />
+        </root>
+    </springProfile>
+
+    <!-- 测试环境 -->
+    <springProfile name="test">
+    	<!-- 输出到控制台 -->
+	    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	        <encoder>
+	            <pattern>${PATTERN}</pattern>
+	        </encoder>
+	    </appender>
+        <!-- 每天产生一个文件 -->
+        <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <file>${PATH_TEST}/${FILE_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <fileNamePattern>${PATH_TEST}/${FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+         <!-- 异步输出 -->
+		<appender name ="LOGFILE_ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+			<!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+			<discardingThreshold >0</discardingThreshold>
+			<!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+			<queueSize>1024</queueSize>
+			<!-- 添加附加的appender,最多只能添加一个 -->
+			<appender-ref ref ="LOGFILE"/>
+		</appender>
+
+        <logger name="com.ba.springcloud.eureka" level="debug" />
+        <root level="info">
+        	<appender-ref ref="CONSOLE" />
+            <appender-ref ref="LOGFILE_ASYNC" />
+        </root>
+    </springProfile>
+    
+    <!-- 生产环境prod1 -->
+    <springProfile name="prod1">
+    	<!-- 输出到控制台 -->
+	    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	        <encoder>
+	            <pattern>${PATTERN}</pattern>
+	        </encoder>
+	    </appender>
+        <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH_PROD}/${FILE_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PATH_PROD}/${FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        
+         <!-- 异步输出 -->
+		<appender name ="LOGFILE_ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+			<!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+			<discardingThreshold >0</discardingThreshold>
+			<!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+			<queueSize>1024</queueSize>
+			<!-- 添加附加的appender,最多只能添加一个 -->
+			<appender-ref ref ="LOGFILE"/>
+		</appender>
+
+        <!--<root level="warn"> -->
+        <root level="info">
+        	<appender-ref ref="CONSOLE" />
+        	<appender-ref ref="LOGFILE" />
+<!--             <appender-ref ref="LOGFILE_ASYNC" /> -->
+        </root>
+    </springProfile>
+    <!-- 生产环境prod2 -->
+    <springProfile name="prod2">
+    	<!-- 输出到控制台 -->
+	    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	        <encoder>
+	            <pattern>${PATTERN}</pattern>
+	        </encoder>
+	    </appender>
+        <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH_PROD}/${FILE_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PATH_PROD}/${FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        
+         <!-- 异步输出 -->
+		<appender name ="LOGFILE_ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+			<!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+			<discardingThreshold >0</discardingThreshold>
+			<!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+			<queueSize>1024</queueSize>
+			<!-- 添加附加的appender,最多只能添加一个 -->
+			<appender-ref ref ="LOGFILE"/>
+		</appender>
+
+        <!--<root level="warn"> -->
+        <root level="info">
+        	<appender-ref ref="CONSOLE" />
+        	<appender-ref ref="LOGFILE" />
+<!--             <appender-ref ref="LOGFILE_ASYNC" /> -->
+        </root>
+    </springProfile>
+    <!-- 生产环境prod3 -->
+    <springProfile name="prod3">
+    	<!-- 输出到控制台 -->
+	    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	        <encoder>
+	            <pattern>${PATTERN}</pattern>
+	        </encoder>
+	    </appender>
+        <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH_PROD}/${FILE_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PATH_PROD}/${FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        
+         <!-- 异步输出 -->
+		<appender name ="LOGFILE_ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+			<!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+			<discardingThreshold >0</discardingThreshold>
+			<!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+			<queueSize>1024</queueSize>
+			<!-- 添加附加的appender,最多只能添加一个 -->
+			<appender-ref ref ="LOGFILE"/>
+		</appender>
+
+        <!--<root level="warn"> -->
+        <root level="info">
+        	<appender-ref ref="CONSOLE" />
+        	<appender-ref ref="LOGFILE" />
+<!--             <appender-ref ref="LOGFILE_ASYNC" /> -->
+        </root>
+    </springProfile>
+</configuration>

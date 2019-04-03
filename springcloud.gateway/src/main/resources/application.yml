@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+      routes:
+      - id: ribbon
+#        uri: http://user-7001.com:7001
+        uri: lb://RIBBON
+        predicates:
+        - Path=/api-a/**
+        filters:
+        - StripPrefix=1 #是否加上请求前缀
+  profiles:
+    active: prod1

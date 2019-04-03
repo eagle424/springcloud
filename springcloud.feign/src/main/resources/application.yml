@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: feign
+  profiles:
+    active: prod1
