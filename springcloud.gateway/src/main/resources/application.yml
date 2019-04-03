@@ -8,12 +8,16 @@ spring:
 #        locator:
 #          enabled: true
       routes:
-      - id: ribbon
-#        uri: http://user-7001.com:7001
-        uri: lb://RIBBON
+      - id: user
+        uri: lb://user
         predicates:
         - Path=/api-a/**
         filters:
-        - StripPrefix=1 #是否加上请求前缀
+        - StripPrefix=1 #过滤的路径层级
   profiles:
     active: prod1
+
+#gateway:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+  
