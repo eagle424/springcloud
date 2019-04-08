@@ -8,12 +8,30 @@ spring:
 #        locator:
 #          enabled: true
       routes:
+      - id: auth
+        uri: lb://oauth
+        predicates:
+        - Path=/api-b/**
       - id: user
         uri: lb://user
         predicates:
         - Path=/api-a/**
         filters:
         - StripPrefix=1 #过滤的路径层级
+        #- RewritePath=/api-a/(?<path>.*), /$\{path} # /api-a/foo会替换成/foo
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/fallback
+        - name: RequestRateLimiter
+          args:
+            key-resolver: '#{@ipKeyResolver}'  # 指定自定义解析器，hostAddrKeyResolver为解析器名称
+            #key-resolver: '#{@hostAddrKeyResolver}'  # 指定自定义解析器，hostAddrKeyResolver为解析器名称
+            #key-resolver: '#{@userKeyResolver}'  
+            #key-resolver: '#{@apiKeyResolver}'
+            redis-rate-limiter.replenishRate: 1 #令牌桶每秒填充平均速率。
+            redis-rate-limiter.burstCapacity: 2 #令牌桶总容量。
+     
   profiles:
     active: prod1
 

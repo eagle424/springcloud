@@ -34,7 +34,7 @@ public class MyProbabilityRandomRule extends AbstractLoadBalancerRule {
             if (Thread.interrupted()) {
                 return null;
             }
-            List<Server> upList = lb.getReachableServers();
+//            List<Server> upList = lb.getReachableServers();
             List<Server> allList = lb.getAllServers();
 
             final int number = rand.nextInt(10);

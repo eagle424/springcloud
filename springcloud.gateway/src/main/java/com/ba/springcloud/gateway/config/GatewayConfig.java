@@ -18,7 +18,11 @@ public class GatewayConfig {
 	 */
 	@Bean
 	public IRule irule() {
-		// 实现随机的负载均衡策略
+		/*
+		 * 1. RandomRule
+		 * 2. RetryRule
+		 * 3. RoundRobinRule 
+		 */
 		return new RoundRobinRule();
 	}
 }
