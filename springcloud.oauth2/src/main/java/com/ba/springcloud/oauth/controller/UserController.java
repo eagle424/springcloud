@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
-    
+	@RequestMapping("/info")
+	public String info() {
+		return "hello user";
+	}
 
 }

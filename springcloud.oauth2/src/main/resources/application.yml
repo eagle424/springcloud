@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: oauth2
+  profiles:
+    active: prod1
+  datasource:
+    url: jdbc:mysql://192.168.0.237:3306/mydatabase?serverTimezone=Shanghai&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT&useSSL=false
+    username: root
+    password: "111111"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 10
+      idle-timeout: 10000

@@ -2,6 +2,7 @@ package com.ba.springcloud.oauth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.ba.springcloud.oauth.server.DomainUserDetailsService;
+import com.ba.springcloud.oauth.server.UserDetailsServiceImpl;
 
 /**
  * @author Administrator
@@ -19,23 +20,30 @@ import com.ba.springcloud.oauth.server.DomainUserDetailsService;
  */
 @Configuration
 @EnableWebSecurity
-//@Order(1)
+@Order(1)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService(){
 //        return new UserService();
-    	return new DomainUserDetailsService();
+    	return new UserDetailsServiceImpl();
     }
     
-    @Bean
+    @Bean	
     public BCryptPasswordEncoder passwordEncoder(){
+//    	return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
         return new BCryptPasswordEncoder();
+        
     }
     
-   //不定义没有password grant_type
-    @Override
+    /**
+     * 密码模式下必须注入的bean authenticationManagerBean
+     * 认证是由 AuthenticationManager 来管理的，
+     * 但是真正进行认证的是 AuthenticationManager 中定义的AuthenticationProvider。
+     *  AuthenticationManager 中可以定义有多个 AuthenticationProvider
+     */
     @Bean
+    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
@@ -44,17 +52,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("irving")
+                .withUser("user01")
                 .password(passwordEncoder().encode("123456"))
-                .roles("read");
-        // auth.userDetailsService(userDetailsService())
-        //   .passwordEncoder(passwordEncoder());
+                .roles("ROLE_USER");
+//        auth.authenticationProvider(provider);
+//        auth.userDetailsService(userService);
     }
 
-//    @Bean
-//    public static NoOpPasswordEncoder passwordEncoder() {
-//        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-//    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http

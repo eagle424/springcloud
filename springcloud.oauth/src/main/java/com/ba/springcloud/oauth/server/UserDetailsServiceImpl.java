@@ -1,6 +1,5 @@
 package com.ba.springcloud.oauth.server;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  */
 @Service
-public class DomainUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 //    @Autowired
 //    private AccountRepository accountRepository;    // 账户数据操作接口

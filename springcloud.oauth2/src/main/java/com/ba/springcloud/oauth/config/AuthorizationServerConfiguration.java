@@ -1,8 +1,5 @@
 package com.ba.springcloud.oauth.config;
 
-import java.security.KeyPair;
-import java.util.concurrent.TimeUnit;
-
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +7,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * [/oauth/authorize]
@@ -38,9 +29,8 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
  * @date 2019年4月8日
  * @version 1.0
  */
-@Configuration
-@EnableAuthorizationServer
-@Order(3)
+//@Configuration
+//@EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 	
 	/**
@@ -51,20 +41,25 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public TokenStore tokenStore(){
     	TokenStore tokenStore = null; 
     	// Redis's TokenStore
-    	tokenStore = new RedisTokenStore(connectionFactory);
+    	// tokenStore = new RedisTokenStore(connectionFactory);
     	// InMemory TokenStore
-//    	tokenStore = new InMemoryTokenStore();
+    	tokenStore = new InMemoryTokenStore();
     	// JDBC TokenStore
 //    	tokenStore = new JdbcTokenStore(dataSource);
         return tokenStore;
     }
     
-	@Autowired
-    @Qualifier("authenticationManagerBean")
-    private AuthenticationManager authenticationManager;
+    
+    @Bean("jdbcTokenStore")
+    public JdbcTokenStore getJdbcTokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }
     
 	@Autowired
-    private RedisConnectionFactory connectionFactory;
+    private AuthenticationManager authenticationManager;
+    
+//	@Autowired
+//    private RedisConnectionFactory connectionFactory;
     
 	@Autowired
     private DataSource dataSource;
@@ -72,20 +67,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	@Autowired
 	private TokenStore tokenStore;
     
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
 
-//    @Bean(name = "dataSource")
-//    @ConfigurationProperties(prefix = "spring.datasource")
-//    public DataSource dataSource() {
-//        return DataSourceBuilder.create().build();
-//    }
-
-    @Bean("jdbcTokenStore")
-    public JdbcTokenStore getJdbcTokenStore() {
-        return new JdbcTokenStore(dataSource);
-    }
+ 
 
 //    @Bean
 //    public UserDetailsService userDetailsService(){
